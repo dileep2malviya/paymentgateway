@@ -1,6 +1,7 @@
 "use client";
 
 import { PaymentForm } from "@/components/PaymentForm";
+import { TransactionHistory } from "@/components/TransactionHistory";
 import type { PaymentFieldErrors, PaymentFormValues } from "@/types/payment";
 
 export default function Home() {
@@ -16,7 +17,6 @@ export default function Home() {
   const errors: PaymentFieldErrors = {};
   const cardType = "visa" as const;
   const isValid = true;
-  const status = "idle" as const;
 
   const onChangeField = () => {};
   const onChangeCurrency = () => {};
@@ -49,6 +49,8 @@ export default function Home() {
               onSubmit={handleSubmit}
             />
           </div>
+
+          <TransactionHistory />
         </div>
       </main>
     </div>
