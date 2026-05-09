@@ -2,25 +2,13 @@
 
 import { PaymentForm } from "@/components/PaymentForm";
 import { TransactionHistory } from "@/components/TransactionHistory";
+import { usePaymentForm } from "@/hooks/usePaymentForm";
 import type { PaymentFieldErrors, PaymentFormValues } from "@/types/payment";
 
 export default function Home() {
-  const values: PaymentFormValues = {
-    cardholderName: "Alex Johnson",
-    cardNumber: "4242 4242 4242 4242",
-    expiry: "08/29",
-    cvv: "123",
-    amount: "1500.00",
-    currency: "INR",
-  };
 
-  const errors: PaymentFieldErrors = {};
-  const cardType = "visa" as const;
-  const isValid = true;
-
-  const onChangeField = () => {};
-  const onChangeCurrency = () => {};
-  const onBlurField = () => {};
+  const { values, cardType, errors, isValid, onChangeField, onChangeCurrency, onBlurField, resetForm } =
+    usePaymentForm();
 
   const handleSubmit = async () => {
     console.log("Submitting payment");
