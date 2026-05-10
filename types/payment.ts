@@ -9,14 +9,6 @@ export type PaymentStatus =
   | "failed"
   | "timeout";
 
-export interface PaymentFieldErrors {
-  cardholderName?: string;
-  cardNumber?: string;
-  expiry?: string;
-  cvv?: string;
-  amount?: string;
-}
-
 export interface PaymentFormValues {
   cardholderName: string;
   cardNumber: string;
@@ -26,14 +18,12 @@ export interface PaymentFormValues {
   currency: Currency;
 }
 
-export interface Transaction {
-  id: string;
-  amount: number;
-  currency: Currency;
-  status: PaymentStatus;
-  timestamp: string;
-  attempts: number;
-  reason?: string;
+export interface PaymentFieldErrors {
+  cardholderName?: string;
+  cardNumber?: string;
+  expiry?: string;
+  cvv?: string;
+  amount?: string;
 }
 
 export interface PaymentPayload {
@@ -56,3 +46,13 @@ export interface GatewayFailureResponse {
 }
 
 export type GatewayResponse = GatewaySuccessResponse | GatewayFailureResponse;
+
+export interface Transaction {
+  id: string;
+  amount: number;
+  currency: Currency;
+  status: PaymentStatus;
+  timestamp: string;
+  attempts: number;
+  reason?: string;
+}

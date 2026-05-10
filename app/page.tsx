@@ -1,20 +1,42 @@
 "use client";
 
 import { PaymentForm } from "@/components/PaymentForm";
+import { StatusScreen } from "@/components/StatusScreen";
 import { TransactionHistory } from "@/components/TransactionHistory";
-import { usePaymentForm } from "@/hooks/usePaymentForm";
 import { usePaymentFlow } from "@/hooks/usePaymentFlow";
+import { usePaymentForm } from "@/hooks/usePaymentForm";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectTransaction } from "@/store/paymentSlice";
+
+const MAX_RETRIES = 3;
 
 export default function Home() {
   const dispatch = useAppDispatch();
   const { values, cardType, errors, isValid, onChangeField, onChangeCurrency, onBlurField, resetForm } =
     usePaymentForm();
+  const { submitPayment, resetForNewPayment } = usePaymentFlow();
 
-    const { submitPayment, resetForNewPayment } = usePaymentFlow();
+  const { status, userMessage, history, currentTransaction, selectedTransactionId } = useAppSelector(
+    (state) => state.payment,
+  );
+
+  const attempts = currentTransaction?.attempts ?? 0;
+  const canRetry =
+    (status === "failed" || status === "timeout") &&
+    currentTransaction !== null &&
+    currentTransaction.attempts < MAX_RETRIES;
 
   const handleSubmit = async () => {
     await submitPayment(values, false);
+  };
+
+  const handleRetry = async () => {
+    await submitPayment(values, true);
+  };
+
+  const handleNewPayment = () => {
+    resetForNewPayment();
+    resetForm();
   };
 
   return (
@@ -33,15 +55,29 @@ export default function Home() {
               errors={errors}
               cardType={cardType}
               isValid={isValid}
-              isProcessing={false}
+              isProcessing={status === "processing"}
               onChangeField={onChangeField}
               onChangeCurrency={onChangeCurrency}
               onBlurField={onBlurField}
               onSubmit={handleSubmit}
             />
+
+            <StatusScreen
+              status={status}
+              message={userMessage}
+              attempts={attempts}
+              maxAttempts={MAX_RETRIES}
+              canRetry={canRetry}
+              onRetry={handleRetry}
+              onNewPayment={handleNewPayment}
+            />
           </div>
 
-          <TransactionHistory />
+          <TransactionHistory
+            history={history}
+            selectedTransactionId={selectedTransactionId}
+            onSelectTransaction={(id) => dispatch(selectTransaction(id))}
+          />
         </div>
       </main>
     </div>
