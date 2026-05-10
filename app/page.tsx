@@ -3,15 +3,18 @@
 import { PaymentForm } from "@/components/PaymentForm";
 import { TransactionHistory } from "@/components/TransactionHistory";
 import { usePaymentForm } from "@/hooks/usePaymentForm";
-import type { PaymentFieldErrors, PaymentFormValues } from "@/types/payment";
+import { usePaymentFlow } from "@/hooks/usePaymentFlow";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 export default function Home() {
-
+  const dispatch = useAppDispatch();
   const { values, cardType, errors, isValid, onChangeField, onChangeCurrency, onBlurField, resetForm } =
     usePaymentForm();
 
+    const { submitPayment, resetForNewPayment } = usePaymentFlow();
+
   const handleSubmit = async () => {
-    console.log("Submitting payment");
+    await submitPayment(values, false);
   };
 
   return (

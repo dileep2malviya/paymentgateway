@@ -35,3 +35,24 @@ export interface Transaction {
   attempts: number;
   reason?: string;
 }
+
+export interface PaymentPayload {
+  transactionId: string;
+  cardholderName: string;
+  cardNumber: string;
+  expiry: string;
+  cvv: string;
+  amount: number;
+  currency: Currency;
+}
+
+export interface GatewaySuccessResponse {
+  status: "success";
+}
+
+export interface GatewayFailureResponse {
+  status: "failed";
+  reason: string;
+}
+
+export type GatewayResponse = GatewaySuccessResponse | GatewayFailureResponse;
