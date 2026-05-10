@@ -11,7 +11,7 @@ export const store = configureStore({
   },
   preloadedState: {
     payment: {
-      status: "idle",
+      status: "idle" as import("@/types/payment").PaymentStatus,
       history: preloadedHistory,
       currentTransaction: null,
       selectedTransactionId: null,

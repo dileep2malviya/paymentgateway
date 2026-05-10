@@ -14,6 +14,14 @@ const currencyFormatter = (currency: Transaction["currency"], amount: number): s
   }).format(amount);
 };
 
+const timestampFormatter = (value: string): string => {
+  return new Intl.DateTimeFormat("en-IN", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Asia/Kolkata",
+  }).format(new Date(value));
+};
+
 const statusLabel: Record<Transaction["status"], string> = {
   idle: "Idle",
   processing: "Processing",
@@ -59,7 +67,7 @@ export function TransactionHistory({
                       {statusLabel[transaction.status]}
                     </span>
                   </div>
-                  <p className="mt-1 text-xs text-slate-500">{new Date(transaction.timestamp).toLocaleString()}</p>
+                  <p className="mt-1 text-xs text-slate-500">{timestampFormatter(transaction.timestamp)}</p>
                 </button>
               </li>
             );
@@ -84,12 +92,8 @@ export function TransactionHistory({
               <dd>{statusLabel[selectedTransaction.status]}</dd>
             </div>
             <div>
-              <dt className="font-semibold">Attempts</dt>
-              <dd>{selectedTransaction.attempts}</dd>
-            </div>
-            <div>
               <dt className="font-semibold">Timestamp</dt>
-              <dd>{new Date(selectedTransaction.timestamp).toLocaleString()}</dd>
+              <dd>{timestampFormatter(selectedTransaction.timestamp)}</dd>
             </div>
             {selectedTransaction.reason ? (
               <div>
